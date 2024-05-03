@@ -21,7 +21,7 @@ const febHolidays = [
     "I am not going anywhere and not with anyone",
     "Just focus on your goals and dreams",
     "And yes i do get angry sometimes",
-    "but you turns my anger into a smiling face as soon as i see your face",
+    "but you turns my anger into smile as soon as i see your face",
     "Sleep is very important to ache se soya kro😒",
     "This for you,",
     "Je ne suis peut-être pas ton premier amour",
