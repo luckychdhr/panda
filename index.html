@@ -1,25 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>love Wheel</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google Font Link for Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <title>love Wheel</title> -->
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Font Link for Icons -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <script src="script.js" defer></script>
 </head>
+
 <body>
-    <header>
-        <h1>Wheel of Love💕 for Radha</h1>
-      </header>
-      <div class="container">
-        <ul></ul>
-        <div class="controls">
-          <button onclick="adjustDay(-1)">▲</button>
-          <button onclick="adjustDay(1)">▼</button>
-        </div>
+    <header id="main1" style="display: none;">
+      <h1>Wheel of Love💕 for Radha</h1>
+    </header>
+    <div id="main2" class="container" style="display: none;">
+      <ul></ul>
+      <div class="controls">
+        <button onclick="adjustDay(-1)">▲</button>
+        <button onclick="adjustDay(1)">▼</button>
       </div>
+    </div>
+  <div id="timerBox">
+    <p class="headingText" style="margin-bottom: 20px; font-size: 20px; text-align: center;">This Page will open at 17:00:00 i.e. 5PM Indian Time</p>
+    <p class="timeText" style="font-size: 30px; font-weight: 700;">15:30:00</p>
+    <p class="headingText" style="margin-top: 20px; font-size: 20px; text-align: center;">Use Laptop for better view</p>
+  </div>
 </body>
+<script>
+  setInterval(() => {
+    let currentDate = new Date()
+    var className = document.getElementById('timerBox')
+    className.querySelector('.timeText').innerHTML = currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds()
+    if (currentDate.getHours() == 15) {
+      className.style.display = 'none'
+      document.getElementById('main1').style.display = 'block'
+      document.getElementById('main2').style.display = 'block'
+    }
+  }, 1000);
+</script>
+
 </html>
