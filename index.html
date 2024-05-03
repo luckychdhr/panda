@@ -25,7 +25,7 @@
       </div>
     </div>
   <div id="timerBox">
-    <p class="headingText" style="margin-bottom: 20px; font-size: 20px; text-align: center;">This Page will open at 17:00:00 i.e. 5PM Indian Time</p>
+    <p class="headingText" style="margin-bottom: 20px; font-size: 20px; text-align: center;">This Page will open at 23:00:00 i.e. 11PM Indian Time</p>
     <p class="timeText" style="font-size: 30px; font-weight: 700;">15:30:00</p>
     <p class="headingText" style="margin-top: 20px; font-size: 20px; text-align: center;">Use Laptop for better view</p>
   </div>
@@ -35,7 +35,7 @@
     let currentDate = new Date()
     var className = document.getElementById('timerBox')
     className.querySelector('.timeText').innerHTML = currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds()
-    if (currentDate.getHours() == 17) {
+    if (currentDate.getHours() == 23) {
       className.style.display = 'none'
       document.getElementById('main1').style.display = 'block'
       document.getElementById('main2').style.display = 'block'
