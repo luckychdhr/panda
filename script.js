@@ -28,6 +28,7 @@ const febHolidays = [
   "Mais je serai le dernier",
   "Baki time time se snap aa jani chaiye",
   "Aur kuch bhi banao wo bhi 😋",
+  "Bina ladai solve kiye kbhi nhi sounga",
   "Gopi",
   "♥️♥️"
 ];
