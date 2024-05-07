@@ -10,37 +10,166 @@
   <!-- Google Font Link for Icons -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-  <script src="script.js" defer></script>
+  <!-- <script src="script.js" defer></script> -->
 </head>
 
 <body>
-    <header id="main1" style="display: none;">
-      <h1>Wheel of Love💕 for Radha</h1>
-    </header>
-    <div id="main2" class="container" style="display: none;">
-      <ul></ul>
-      <div class="controls">
-        <button onclick="adjustDay(-1)">▲</button>
-        <button onclick="adjustDay(1)">▼</button>
-      </div>
+  <header id="main1" style="display: block;">
+    <h1>Wheel of Love💕 for Radha</h1>
+  </header>
+  <div id="main2" class="container" style="display: block;">
+    <ul></ul>
+    <div class="controls">
+      <button id="adjustDayBack">▲</button>
+      <button id="adjustDayNext">▼</button>
     </div>
-  <div id="timerBox">
+  </div>
+
+  <!-- If you want to add timer -->
+  <!-- <div id="timerBox">
     <p class="headingText" style="margin-bottom: 20px; font-size: 20px; text-align: center;">This Page will open at 17:00:00 i.e. 5PM Indian Time</p>
     <p class="timeText" style="font-size: 30px; font-weight: 700;">15:30:00</p>
     <p class="headingText" style="margin-top: 20px; font-size: 20px; text-align: center;">Use Laptop for better view</p>
+  </div> -->
+  <div id="timerBox" style="position: absolute; bottom: 0;">
+    <div class="input-container">
+      <input id="textData" type="text" class="input-box" placeholder="Add your thoughts...">
+      <button id="insert" class="submit-button" onclick="submitForm()">Submit</button>
+    </div>
   </div>
 </body>
 <script>
-  setInterval(() => {
-    let currentDate = new Date()
-    var className = document.getElementById('timerBox')
-    className.querySelector('.timeText').innerHTML = currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds()
-   // if (currentDate.getHours() == 17) {
-      className.style.display = 'none'
-      document.getElementById('main1').style.display = 'block'
-      document.getElementById('main2').style.display = 'block'
-  //  }
-  }, 1000);
+  // setInterval(() => {
+  //   let currentDate = new Date()
+  //   var className = document.getElementById('timerBox')
+  //   className.querySelector('.timeText').innerHTML = currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds()
+  //  // if (currentDate.getHours() == 17) {
+  //     className.style.display = 'none'
+  //     document.getElementById('main1').style.display = 'block'
+  //     document.getElementById('main2').style.display = 'block'
+  // //  }
+  // }, 1000);
+</script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBPW9AOEEP04OzSubp5bcoDtTiIqM5uAYU",
+    authDomain: "circular-hash-335906.firebaseapp.com",
+    projectId: "circular-hash-335906",
+    storageBucket: "circular-hash-335906.appspot.com",
+    messagingSenderId: "1012399691345",
+    appId: "1:1012399691345:web:41b9124532975c6e1a4a70",
+    measurementId: "G-458ZK0FJMW"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  import { getDatabase, ref, get, set, child, update, remove }
+    from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js"
+
+  const db = getDatabase();
+  var insertBtn = document.querySelector("#insert");
+  var adjustDayBack = document.querySelector("#adjustDayBack");
+  var adjustDayNext = document.querySelector("#adjustDayNext");
+
+  const ulEl = document.querySelector("ul");
+  const d = new Date();
+  let daynumber = d.getMonth() == 1 ? d.getDate() - 1 : 0;
+  let activeIndex = daynumber;
+  let firebaseMyData = []
+  function init(febHolidays,rotate) {
+      febHolidays.forEach((holiday, idx) => {
+        const liEl = document.createElement("li");
+        liEl.style.setProperty("--day_idx", idx);
+        liEl.innerHTML = `<time datetime="2022-02-${idx + 1}">${idx + 1
+          }</time><span>${holiday}</span>`;
+        ulEl.append(liEl);
+      });
+      ulEl.style.setProperty("--rotateDegrees", rotate);
+      adjustDay(0,febHolidays);
+    }
+  function adjustDay(nr,febHolidays=firebaseMyData) {
+      daynumber += nr;
+      ulEl.style.setProperty("--currentDay", daynumber);
+      const activeEl = document.querySelector("li.active");
+      if (activeEl) activeEl.classList.remove("active");
+      activeIndex = (activeIndex + nr + febHolidays.length) % febHolidays.length;
+      const newActiveEl = document.querySelector(
+        `li:nth-child(${activeIndex + 1})`
+      );
+      document.body.style.backgroundColor = window.getComputedStyle(
+        newActiveEl
+      ).backgroundColor;
+      newActiveEl.classList.add("active");
+    }
+  function showPreviousData(febHolidays) {
+    const rotate = -360 / febHolidays.length;
+    init(febHolidays,rotate);
+   
+  }
+  function insertData(oldData) {
+    var newData = document.querySelector("#textData");
+
+    set(ref(db, "MainUser"), {
+      text: [...oldData, newData.value],
+    })
+      .then(() => {
+        document.getElementById('textData').value = ''
+        getAllData()
+        alert("Your Thought added successfully");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
+  let getDataFromFirebase = []
+  function getAllData(isAdd) {
+    const dbref = ref(db);
+    get(child(dbref, "MainUser"))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log('snapshot::', snapshot.val())
+          firebaseMyData = snapshot.val().text
+          showPreviousData(snapshot.val().text)
+          if (isAdd === true) {
+            insertData(snapshot.val().text)
+          }
+        } else {
+          insertData([])
+          alert("No data found");
+        }
+      })
+      .catch((error) => {
+        alert(error)
+      })
+  }
+
+  insertBtn.addEventListener('click', () => getAllData(true));
+  adjustDayBack.addEventListener('click', () => adjustDay(-1));
+  adjustDayNext.addEventListener('click', () => adjustDay(1));
+  getAllData()
+
+  window.addEventListener("keydown", (e) => {
+    switch (e.key) {
+      case "ArrowUp":
+        adjustDay(-1);
+        break;
+      case "ArrowDown":
+        adjustDay(1);
+        break;
+      default:
+        return;
+    }
+  });
 </script>
 
 </html>
