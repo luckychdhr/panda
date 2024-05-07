@@ -14,10 +14,10 @@
 </head>
 
 <body>
-  <header id="main1" style="display: block;">
+  <header id="main1" style="display: none;">
     <h1>Wheel of Love💕 for Radha</h1>
   </header>
-  <div id="main2" class="container" style="display: block;">
+  <div id="main2" class="container" style="display: none;">
     <ul></ul>
     <div class="controls">
       <button id="adjustDayBack">▲</button>
@@ -31,14 +31,42 @@
     <p class="timeText" style="font-size: 30px; font-weight: 700;">15:30:00</p>
     <p class="headingText" style="margin-top: 20px; font-size: 20px; text-align: center;">Use Laptop for better view</p>
   </div> -->
-  <div id="timerBox" style="position: absolute; bottom: 0;">
+  <div id="timerBox" style="position: absolute; bottom: 0;display: none;">
+    <div class="lockContainer" style="margin-bottom: 10px;">
+      <button class="submit-button" style="background-color: rgb(11, 11, 59);" onclick="lockPage()">Lock this page</button>
+    </div>
     <div class="input-container">
       <input id="textData" type="text" class="input-box" placeholder="Add your thoughts...">
       <button id="insert" class="submit-button" onclick="submitForm()">Submit</button>
     </div>
   </div>
+  <div id="passContainer">
+    <div class="input-container">
+      <input id="passwordText" autocomplete="off" type="text" class="input-box" placeholder="Enter password to verify...">
+      <button id="passwordBtn" class="submit-button2" onclick="checkPassword()">Submit</button>
+    </div>
+  </div>
 </body>
 <script>
+  function checkPassword() {
+    const password = document.getElementById('passwordText').value
+    if (password === 'Dbbu' || password === 'dbbu') {
+      document.getElementById('passwordText').value = ''
+      document.getElementById('passContainer').style.display = 'none'
+      document.getElementById('main1').style.display = 'block'
+      document.getElementById('main2').style.display = 'block'
+      document.getElementById('timerBox').style.display = 'block'
+    }else{
+      alert('Wrong Password panda, Try again')
+      document.getElementById('passwordText').value = ''
+    }
+  }
+  function lockPage() {
+      document.getElementById('passContainer').style.display = 'block'
+      document.getElementById('main1').style.display = 'none'
+      document.getElementById('main2').style.display = 'none'
+      document.getElementById('timerBox').style.display = 'none'
+  }
   // setInterval(() => {
   //   let currentDate = new Date()
   //   var className = document.getElementById('timerBox')
@@ -86,35 +114,35 @@
   let daynumber = d.getMonth() == 1 ? d.getDate() - 1 : 0;
   let activeIndex = daynumber;
   let firebaseMyData = []
-  function init(febHolidays,rotate) {
-      febHolidays.forEach((holiday, idx) => {
-        const liEl = document.createElement("li");
-        liEl.style.setProperty("--day_idx", idx);
-        liEl.innerHTML = `<time datetime="2022-02-${idx + 1}">${idx + 1
-          }</time><span>${holiday}</span>`;
-        ulEl.append(liEl);
-      });
-      ulEl.style.setProperty("--rotateDegrees", rotate);
-      adjustDay(0,febHolidays);
-    }
-  function adjustDay(nr,febHolidays=firebaseMyData) {
-      daynumber += nr;
-      ulEl.style.setProperty("--currentDay", daynumber);
-      const activeEl = document.querySelector("li.active");
-      if (activeEl) activeEl.classList.remove("active");
-      activeIndex = (activeIndex + nr + febHolidays.length) % febHolidays.length;
-      const newActiveEl = document.querySelector(
-        `li:nth-child(${activeIndex + 1})`
-      );
-      document.body.style.backgroundColor = window.getComputedStyle(
-        newActiveEl
-      ).backgroundColor;
-      newActiveEl.classList.add("active");
-    }
+  function init(febHolidays, rotate) {
+    febHolidays.forEach((holiday, idx) => {
+      const liEl = document.createElement("li");
+      liEl.style.setProperty("--day_idx", idx);
+      liEl.innerHTML = `<time datetime="2022-02-${idx + 1}">${idx + 1
+        }</time><span>${holiday}</span>`;
+      ulEl.append(liEl);
+    });
+    ulEl.style.setProperty("--rotateDegrees", rotate);
+    adjustDay(0, febHolidays);
+  }
+  function adjustDay(nr, febHolidays = firebaseMyData) {
+    daynumber += nr;
+    ulEl.style.setProperty("--currentDay", daynumber);
+    const activeEl = document.querySelector("li.active");
+    if (activeEl) activeEl.classList.remove("active");
+    activeIndex = (activeIndex + nr + febHolidays.length) % febHolidays.length;
+    const newActiveEl = document.querySelector(
+      `li:nth-child(${activeIndex + 1})`
+    );
+    document.body.style.backgroundColor = window.getComputedStyle(
+      newActiveEl
+    ).backgroundColor;
+    newActiveEl.classList.add("active");
+  }
   function showPreviousData(febHolidays) {
     const rotate = -360 / febHolidays.length;
-    init(febHolidays,rotate);
-   
+    init(febHolidays, rotate);
+
   }
   function insertData(oldData) {
     var newData = document.querySelector("#textData");
